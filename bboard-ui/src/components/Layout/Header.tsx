@@ -15,6 +15,7 @@
 
 import React from 'react';
 import { AppBar, Box } from '@mui/material';
+import { WalletConnect } from '../WalletConnect';
 
 /**
  * A simple application level header for the bulletin board application.
@@ -40,6 +41,9 @@ export const Header: React.FC = () => (
       data-testid="header-logo"
     >
       <img src="/midnight-logo.png" alt="logo-image" height={66} />
+    </Box>
+    <Box sx={{ px: 4 }}>
+      <WalletConnect />
     </Box>
   </AppBar>
 );

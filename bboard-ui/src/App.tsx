@@ -14,8 +14,8 @@
 // limitations under the License.
 
 import React, { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
-import { MainLayout, Board } from './components';
+import { Box, Typography } from '@mui/material';
+import { MainLayout, Board, CircuitCall } from './components';
 import { useDeployedBoardContext } from './hooks';
 import { type BoardDeployment } from './contexts';
 import { type Observable } from 'rxjs';
@@ -44,14 +44,22 @@ const App: React.FC = () => {
   return (
     <Box sx={{ background: '#000', minHeight: '100vh' }}>
       <MainLayout>
-        {boardDeployments.map((boardDeployment, idx) => (
-          <div data-testid={`board-${idx}`} key={`board-${idx}`}>
-            <Board boardDeployment$={boardDeployment} />
-          </div>
-        ))}
-        <div data-testid="board-start">
-          <Board />
-        </div>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, py: 4 }}>
+          <CircuitCall />
+          <Typography variant="subtitle1" color="text.secondary">
+            Full bulletin board
+          </Typography>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, justifyContent: 'center' }}>
+            {boardDeployments.map((boardDeployment, idx) => (
+              <div data-testid={`board-${idx}`} key={`board-${idx}`}>
+                <Board boardDeployment$={boardDeployment} />
+              </div>
+            ))}
+            <div data-testid="board-start">
+              <Board />
+            </div>
+          </Box>
+        </Box>
       </MainLayout>
     </Box>
   );

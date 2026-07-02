@@ -1,0 +1,7 @@
+{
+  "buildCommand": "cd contract && npm run compact && npm run build && cd ../bboard-ui && npm run build",
+  "outputDirectory": "bboard-ui/dist",
+  "installCommand": "npm install",
+  "framework": null,
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}

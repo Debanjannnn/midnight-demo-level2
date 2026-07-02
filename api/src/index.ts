@@ -42,12 +42,17 @@ import { BBoardPrivateState, createBBoardPrivateState } from '../../contract/src
 /**
  * An API for a deployed bulletin board.
  */
+export interface CircuitTxResult {
+  readonly txHash: string;
+  readonly blockHeight: number;
+}
+
 export interface DeployedBBoardAPI {
   readonly deployedContractAddress: ContractAddress;
   readonly state$: Observable<BBoardDerivedState>;
 
-  post: (message: string) => Promise<void>;
-  takeDown: () => Promise<void>;
+  post: (message: string) => Promise<CircuitTxResult>;
+  takeDown: () => Promise<CircuitTxResult>;
 }
 
 /**
@@ -135,7 +140,7 @@ export class BBoardAPI implements DeployedBBoardAPI {
    * @remarks
    * This method can fail during local circuit execution if the bulletin board is currently occupied.
    */
-  async post(message: string): Promise<void> {
+  async post(message: string): Promise<CircuitTxResult> {
     this.logger?.info(`postingMessage: ${message}`);
 
     const txData = await this.deployedContract.callTx.post(message);
@@ -147,6 +152,11 @@ export class BBoardAPI implements DeployedBBoardAPI {
         blockHeight: txData.public.blockHeight,
       },
     });
+
+    return {
+      txHash: txData.public.txHash,
+      blockHeight: txData.public.blockHeight,
+    };
   }
 
   /**
@@ -157,7 +167,7 @@ export class BBoardAPI implements DeployedBBoardAPI {
    * or if the currently posted message isn't owned by the owner computed from the current private
    * state.
    */
-  async takeDown(): Promise<void> {
+  async takeDown(): Promise<CircuitTxResult> {
     this.logger?.info('takingDownMessage');
 
     const txData = await this.deployedContract.callTx.takeDown();
@@ -169,6 +179,11 @@ export class BBoardAPI implements DeployedBBoardAPI {
         blockHeight: txData.public.blockHeight,
       },
     });
+
+    return {
+      txHash: txData.public.txHash,
+      blockHeight: txData.public.blockHeight,
+    };
   }
 
   /**
